@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
+	<style>
+		.card{
+			min-height: 200px;
+            animation: rotate 2s ease infinite;
+		}
+        @keyframes scale {
+            0%{
+                transform: scale(1);
+            }
+            50%{
+                transform: scale(1.1);
+            }
+            100%{
+                transform: scale(1);
+            }
+        }
+
+        @keyframes rotate {
+            0%{
+                transform: rotate(-5deg);
+            }
+            50%{
+                transform: rotate(10deg);
+            }
+            100%{
+                transform: rotate(-5deg);
+            }
+        }
+	</style>
+</head>
+<body>
+	
+	<div class="container">
+		<h2 class="text-center my-3">Додавання атрибутів та класів.</h2>
+		<div class="row">
+			<div class="col-5 mt-5">
+				<h4 class="mb-4">Властивості карток</h4>
+				 <div class="form-group my-4">
+					<label for="card_num">№</label>
+					<select class="form-control" id="card_num" onchange="drawCard()">
+					  <option>1</option>
+					  <option>2</option>
+					  <option>3</option>
+					  <option>4</option>
+					</select>
+				</div>
+				<div class="form-group my-4">
+					<label for="card_color">Text Color</label>
+					<select class="form-control" id="card_color" onchange="drawCard()">
+					  <option>black</option>
+					  <option>red</option>
+					  <option>blue</option>
+					  <option>green</option>
+					  <option>yellow</option>
+					</select>
+				</div>
+				<div class="form-group my-4">
+					<label for="card_bg">Background</label>
+					<select class="form-control" id="card_bg" onchange="drawCard()">
+					  <option>transparent</option>
+					  <option>red</option>
+					  <option>blue</option>
+					  <option>green</option>
+					  <option>yellow</option>
+					</select>
+				</div>
+                <div class="form-group my-4">
+					<label for="card_op">Opacity</label>
+					<select class="form-control" id="card_op" onchange="drawCard()">
+					  <option>1</option>
+					  <option>0.75</option>
+					  <option>0.5</option>
+					  <option>0.25</option>
+					  <option>0</option>
+					</select>
+				</div>
+                <div class="form-group my-4">
+					<label for="card_an">Animation</label>
+					<select class="form-control" id="card_an" onchange="drawCard()">
+					  <option>rotate</option>
+					  <option>scale</option>
+					</select>
+				</div>
+			</div>
+			<div class="col-7">
+				<div class="row justify-content-around mt-5">
+					<div id="card_1" class="col-5 card mb-4">
+						<h5 class="card-title text-center mt-5">Катка №1</h5>
+					</div>
+					<div id="card_2" class="col-5 card mb-4">
+						<h5 class="card-title text-center  mt-5">Катка №2</h5>
+					</div>
+					<div id="card_3" class="col-5 card mb-4">
+						<h5 class="card-title text-center  mt-5">Катка №3</h5>
+					</div>
+					<div id="card_4" class="col-5 card mb-4">
+						<h5 class="card-title text-center  mt-5">Катка №4</h5>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<script src="z3.js"></script>
+</body>
+</html>
