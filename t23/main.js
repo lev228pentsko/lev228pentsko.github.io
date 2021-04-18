@@ -10,7 +10,7 @@ function showModal(id){
 	<p><b>Місто:</b>${user.address.city}</p>
 	<p><b>Email:</b>${user.email}</p>
 	<p><b>Телефон:</b>${user.phone}</p>
-	<p><b>Сайт:</b> <a href="https://${user.website}" target="_blank">${user.website}</p>
+	<p><b>Сайт:</b> <a href="https://${user.website}" target="_blank">${user.website}</a></p>
 	<p><b>Компанія:</b>${user.company.name}</p>
     `
     document.getElementById('map').setAttribute(
