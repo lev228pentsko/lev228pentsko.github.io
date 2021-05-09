@@ -1,0 +1,48 @@
+body{
+    padding: 0;
+    margin: 0;
+    min-height: 400vh;
+}
+
+.message_box{
+    position: fixed;
+    top: 15px;
+    right: 15px;
+    z-index: 9999;
+}
+
+.message_content{
+    position: relative;
+    background: green;
+    padding: 15px;
+    color: white;
+    font-size: 16px;
+    border-radius: 3px;
+    opacity: 0.8;
+    width: 250px;
+    box-shadow: 0 0 12px #999;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    margin-bottom: 20px;
+}
+
+.message_header{
+    font-weight: 800;
+}
+
+.message_text{
+    font-weight: 400;
+}
+
+.message_success{background-color: #51a351; }
+.message_info{   background-color: #2f96b4; }
+.message_warning{background-color: #f89406; }
+.message_error{  background-color: #bd362f; }
+
+.message_line{
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    height: 4px;
+    background-color: black;
+    opacity: 0.4;
+}
