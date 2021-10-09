@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Document</title>
+</head>
+<body>
+    
+    <script src="https://www.gstatic.com/firebasejs/6.0.0/firebase.js"></script>
+    <script>
+
+        const firebaseConfig = {
+          apiKey: "AIzaSyAbd3rqCtMCc35mbdG6y_akVQ5UAIgWd10",
+          authDomain: "sl-vasyl.firebaseapp.com",
+          projectId: "sl-vasyl",
+          storageBucket: "sl-vasyl.appspot.com",
+          messagingSenderId: "789371501806",
+          appId: "1:789371501806:web:d11b234e7326a0428807ff",
+          measurementId: "G-PBTL5BW8KY"
+        };
+      
+        firebase.initializeApp(firebaseConfig);
+
+        const db = firebase.firestore();
+    </script>
+
+    <script src="main.js"></script>
+</body>
+</html>
