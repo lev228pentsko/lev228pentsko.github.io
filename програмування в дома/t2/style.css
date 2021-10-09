@@ -1,0 +1,9 @@
+body{
+    background: blue;
+    color: cornsilk;
+}
+#menu{
+    height: 10%;
+    width: 100%;
+    background-color: brown;
+}
