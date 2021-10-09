@@ -2,15 +2,16 @@ const spiner = document.getElementById('spiner');
 const list   = document.getElementById('list')
 
 const articles = [];
-
+let index = 0;
 db.collection("articles").get().then( function(res){
 
     spiner.style.display = "none";
-
-    res.forEach( function(doc, index){
+ console.log(res.docs)
+    res.forEach( function(doc){       
         const article = doc.data();
         articles.push(article);
         drawArticle(article, index);
+        index++
     });
 
     console.log(articles);
@@ -34,4 +35,11 @@ db.collection("articles").get().then( function(res){
         article.appendChild(author);
 
         list.appendChild(article)
+    }
+
+    function drawMenu(data){
+        // створити тег а 
+        // додати назву як текст в а(назву статті - title)
+        // додати href як текст в а(href = "#id" - айді статті)
+        // додати тег а menu
     }
