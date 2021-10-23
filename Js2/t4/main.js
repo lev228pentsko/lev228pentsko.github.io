@@ -1,5 +1,16 @@
 const users_table = document.getElementById('users_table');
 
+const firstName = document.getElementById('name');
+const lastName = document.getElementById('lastName');
+const email = document.getElementById('email');
+const age = document.getElementById('age');
+
+let user_id = "";
+
+var myModal = new bootstrap.Modal(document.getElementById('myModal'), {
+    keyboard: false
+})
+
 db.collection("users").get().then(function(res)  {
     let num = 0
     res.forEach( function(doc) {
@@ -21,9 +32,35 @@ db.collection("users").get().then(function(res)  {
             db.collection("users").doc(tr.id).delete().then( function(){
                 // дії після видалення
                 console.log("Document deleted!")
+                document.getElementsByTagName(tr.id).remove();
             });
         })
     })
+
+    const edit_buttons = document.getElementsByClassName('btn-edit');
+    const edit_buttons_arr = Array.from(edit_buttons);
+    edit_buttons_arr.forEach( function(btn){
+        btn.addEventListener('click', function(){
+            console.log('edit' , btn);    
+        const tr = btn.parentElement.parentElement;
+            
+        const columns = tr.getElementsByTagName("td");
+
+        firstName.value = columns[1].innerText;
+        lastName.value  = columns[2].innerText;
+        email.value     = columns[3].innerText;
+        age.value       = columns[4].innerText;
+
+       
+
+          myModal.show();
+
+          user_id = tr.id;
+
+            console.log(columns);
+        })
+    })
+
 });
 
 function drawUser(user, num){
@@ -80,4 +117,30 @@ function drawUser(user, num){
 
     row.id = user.id;
     users_table.appendChild(row);
+}
+function saveChanges(){
+    console.log('save')
+
+    const user = {
+        name: firstName.value,
+        lastName: lastName.value,
+        email: email.value,
+        age: age.value
+    }
+
+    console.log(user)
+
+    db.collection("users").doc(user_id).update(user).then( function(){
+        // дії після видалення
+        console.log("Document is updated!")
+        const row = document.getElementById(user_id)
+        const columns = row.getElementsByTagName("td");
+
+        columns[1].innerText = firstName.value;
+        columns[2].innerText = lastName.value;
+        columns[3].innerText = email.value;
+        columns[4].innerText = age.value;
+
+        myModal.hide();
+    });
 }
