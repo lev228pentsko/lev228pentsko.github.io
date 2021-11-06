@@ -3,6 +3,8 @@ function login(){
     const password = document.getElementById('pass');
 
     db.collection('users').where("email", "==", email.value).get().then( (res)=>{
-        console.log(res.doc())
+       res.forEach(function(doc) {
+                    console.log(doc.data());
+                });
     });
 }
