@@ -33,7 +33,9 @@ function drawArticle(article){
 
     article_body.appendChild(article_text);
 
+    
     const likes_box = document.createElement('div');
+    likes_box.id = "like-btn"
     likes_box.classList.add('d-flex');
     likes_box.classList.add('justify-content-end')
 
@@ -41,9 +43,44 @@ function drawArticle(article){
 
     likes.innerHTML = 
     `
-    <svg viewBox="0 0 24 24"class="style-scope yt-icon" style="pointer-events: none; display: block; width: 50px; height: 50px;"><g class="style-scope yt-icon"><path d="M3,11h3v10H3V11z M18.77,11h-4.23l1.52-4.94C16.38,5.03,15.54,4,14.38,4c-0.58,0-1.14,0.24-1.52,0.65L7,11v10h10.43 c1.06,0,1.98-0.67,2.19-1.61l1.34-6C21.23,12.15,20.18,11,18.77,11z" class="style-scope yt-icon"></path></g></svg>
-    ${article.likes}
+    <svg id="like-svg" viewBox="0 0 24 24"class="style-scope yt-icon" style="pointer-events: none; display: block; width: 30px; height: 30px;"><g class="style-scope yt-icon"><path d="M3,11h3v10H3V11z M18.77,11h-4.23l1.52-4.94C16.38,5.03,15.54,4,14.38,4c-0.58,0-1.14,0.24-1.52,0.65L7,11v10h10.43 c1.06,0,1.98-0.67,2.19-1.61l1.34-6C21.23,12.15,20.18,11,18.77,11z" class="style-scope yt-icon"></path></g></svg>
+    <span id="likes_num">${article.likes}</span>
     `;
-    likes_box.appendChild(likes);
+    likes_box.appendChild(likes);+
     article_body.appendChild(likes_box);
+
+    const likeBtn = document.getElementById('like-btn');
+    console.log(likeBtn);
+    likeBtn.addEventListener('click', function(){
+        const svg = document.getElementById('like-svg');
+
+        const isActive = Array.from(svg.classList).includes("isActive");
+
+        if(isActive == false){
+            svg.classList.add('isActive');
+            //збільшуєм лайки            
+            db.collection('articles').doc(article_id).update({
+                likes: article.likes+1
+            })
+            .then( ()=> {
+                document.getElementById('likes_num').innerText = article.likes+1;
+            })
+        }
+        if(isActive == true){
+            svg.classList.remove('isActive');
+            //зменшуєм лайки
+            db.collection('articles').doc(article_id).update({
+                likes: article.likes
+            })
+            .then( ()=> {
+                document.getElementById('likes_num').innerText = article.likes;
+            })
+        }
+        console.log(isActive);
+        console.log(article.likes);
+    })
+}
+
+function addLike(){
+ 
 }

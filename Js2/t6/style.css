@@ -4,3 +4,7 @@
     background: red;
     margin-right: 20px;
 }
+
+.isActive{
+    fill: blue;
+}
