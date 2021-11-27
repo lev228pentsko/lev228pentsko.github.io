@@ -7,6 +7,7 @@
     <title>T6</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="comments.css">
   </head>
 <body>
 
@@ -14,6 +15,24 @@
 
   </div>
 
+  <div class="container">
+    <div id="new_comment">
+      <div class="mb-3">
+          <p id="user_comment_name">Leave a comment as: UserName</p>
+      </div>
+      <div class="mb-3">
+          <label class="form-label">Your comment</label>
+          <textarea class="form-control" id="comment_text" rows="3"></textarea>
+      </div>
+      <div class="d-flex justify-content-end">
+          <button class="btn btn-primary" onclick="saveComent()">Save</button>
+      </div>
+  </div>
+
+  <div id="old_comments">
+    
+  </div>
+  
 
     <script src="https://www.gstatic.com/firebasejs/6.0.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/6.0.0/firebase-firestore.js"></script>
