@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>t9</title>
+    <script src="https://unpkg.com/vue@next"></script>
+
+</head>
+<body id="app"> 
+    <h1>{{title}}</h1>
+    Bitcoins: {{ counter }}
+    <p v-if="show">Brawl Srars TOP!</p>
+    <p v-if="!show && showTest">Brawl Srars TRASH!</p>
+    <button
+        v-if="counter >= 3 && showButton"
+        v-on:click="getBitcoin"
+        v-on:mouseover="showButton = false"     
+    >
+    Вивести биток</button>
+
+    <p v-for='course in courses'>
+       Курс бітка за {{course.title}} - {{course.value}}
+    </p>
+   
+    <script src="main.js"></script>
+</body>
+</html>
