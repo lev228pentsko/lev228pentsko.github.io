@@ -1,0 +1,24 @@
+<div class="orders">
+    <h1 class="text-center">Orders</h1>
+</div>
+
+<table class="table">
+<thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">Name</th>
+      <th scope="col">Price</th>
+      <th scope="col">Submint</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr v-for="order in orders">
+      <th scope="row">1</th>
+      <td>{{order.product_name}}</td>
+      <td>{{order.total}}</td>
+      <td>
+        <div class="btn btn-success btn-sm">Submint</div>
+      </td>
+    </tr>
+  </tbody>
+</table>
