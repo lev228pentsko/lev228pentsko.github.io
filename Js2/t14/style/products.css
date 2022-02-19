@@ -1,0 +1,9 @@
+.product-img{
+    height: 240px;
+    width: fit-content;
+    margin: 0 auto;
+}
+.card{
+    width: 18rem;
+    margin-bottom: 2rem;
+}
