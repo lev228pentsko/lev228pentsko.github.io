@@ -1,0 +1,11 @@
+<div class="allProducts">
+    <h1 class="text-center">All products</h1>
+
+    <div class="d-flex flex-wrap justify-content-around mt-5">
+        <product-card
+        v-for="product in $parent.products" 
+        :product="product"
+        >
+    </product-card>
+    </div>
+</div>

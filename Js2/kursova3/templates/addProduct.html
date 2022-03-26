@@ -7,8 +7,9 @@
             <input type="text" class="form-control" placeholder="Product name" id="product_name" required>
         </div>
         <div class="mb-3">
-            <label class="form-label">Product logo</label>
-            <input type="text" class="form-control" placeholder="Product img" id="product_img" required>
+            <label class="form-label">Product photo</label>
+            <input type="text" class="form-control" placeholder="Product img" id="product_img" required
+            v-model="$parent.newProductLogo">
         </div>
         <div class="mb-3">
             <label class="form-label">Product price</label>
@@ -21,4 +22,7 @@
             </button>
         </div>
     </div>
+    <p align="center">
+        <img :src="$parent.newProductLogo" alt="" height="200">
+    </p>
 </div>
