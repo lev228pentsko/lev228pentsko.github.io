@@ -8,4 +8,46 @@
         >
     </product-card>
     </div>
+
+    <div 
+    class="modal fade" 
+    id="editModal" tabindex="-1" 
+    aria-labelledby="editModallLabel" 
+    aria-hidden="true"
+    >
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="editModalLabel">Edit product</h5>
+              <button type="button" 
+              class="btn-close" 
+              data-bs-dismiss="modal" 
+              aria-label="Close"
+              ></button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-3">
+                    <label class="form-label">Product name</label>
+                    <input id="edit_name" type="text" class="form-control">
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Product image</label>
+                    <input id="edit_url" type="text" class="form-control">
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Product number</label>
+                    <input id="edit_number" type="number" class="form-control">
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Product price</label>
+                    <input id="edit_price" type="number" class="form-control">
+                </div>             
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+              <button type="button" class="btn btn-primary" @click="saveEditedProduct" data-bs-dismiss="modal">Save changes</button>
+            </div>
+          </div>
+        </div>
+    </div>
 </div>

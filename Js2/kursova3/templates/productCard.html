@@ -5,11 +5,24 @@
             <img :src="product.url" alt="">
         </p>
         <p class="d-flex justify-content-between">
-            <span>Вартість: </span>
-            <span>{{product.price}}$</span>
+            <span> Кількість:</span>
+            <span>{{product.number}}</span>
         </p>
-        <p class="d-flex justify-content-end">
-            <button class="btn btn-danger btn-sm" @click="deleteProduct(product.id)">Delete</button>
+        <p class="d-flex justify-content-between">
+            <span>Вартість: </span>
+            <span>{{product.price}}₴</span>
+        </p>
+        <p class="d-flex justify-content-between">
+            <button class="btn btn-danger btn-sm" @click="deleteProduct(product.id)">
+                Delete
+            </button>
+            <button 
+                class="btn btn-primary btn-sm px-3" 
+                @click="editProduct(product.id)"
+                data-bs-toggle="modal" data-bs-target="#editModal"
+            >
+                Edit
+            </button>
         </p>
     </div>
 </div>

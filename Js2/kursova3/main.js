@@ -16,7 +16,8 @@ document.addEventListener('DOMContentLoaded', async function(){
         logged: false,
         admin: false,
         newProductLogo: "",
-        products: []
+        products: [],
+        edit_product: {}
     };
 
     //Компоненти
@@ -47,6 +48,10 @@ document.addEventListener('DOMContentLoaded', async function(){
                     data.logged = true;
                     this.$root.$forceUpdate();
                     window.location.hash = "/home";
+
+                    localStorage.setItem("user", JSON.stringify(new_user));
+                    localStorage.setItem("admin", JSON.stringify(true));
+
                     this.checkAdmin(user.email);
                     console.log(new_user);
                 })
@@ -76,6 +81,9 @@ document.addEventListener('DOMContentLoaded', async function(){
                     data.logged = true;
                     this.$root.$forceUpdate();
                     window.location.hash = "/home";
+                    localStorage.setItem("user", JSON.stringify(new_user));
+                    localStorage.setItem("admin", JSON.stringify(true));
+
                     this.checkAdmin(user.email);
                     console.log(new_user);               
                 })
@@ -105,6 +113,10 @@ document.addEventListener('DOMContentLoaded', async function(){
                     data.logged = true;
                     this.$root.$forceUpdate();
                     window.location.hash = "/home";
+
+                    localStorage.setItem("user", JSON.stringify(new_user));
+                    localStorage.setItem("admin", JSON.stringify(true));
+
                     this.checkAdmin(user.email);
                     console.log(new_user);
                 })
@@ -145,7 +157,8 @@ document.addEventListener('DOMContentLoaded', async function(){
                 const newProduct = {
                     name: document.getElementById('product_name').value,
                     url: document.getElementById('product_img').value,
-                    price: document.getElementById('product_price').value
+                    price: document.getElementById('product_price').value,
+                    number: document.getElementById('product_number').value
                 }
                 db.collection("products")
                 .add(newProduct)
@@ -160,7 +173,22 @@ document.addEventListener('DOMContentLoaded', async function(){
         props: ['product'],
         methods: {
             deleteProduct(id){
-                console.log(id);
+                db.collection("products")
+                .doc(id)
+                .delete()
+                .then( () => {
+                    console.log("Document deleted!")
+                    data.edit_product = data.products.filter( e => e.id != id );
+                    this.$parent.getAllProducts();
+                });
+            },
+            editProduct(id){
+                console.log("Edit - ", id);
+                data.edit_product = data.products.filter( e => e.id == id )[0];
+                document.getElementById('edit_name').value   = data.edit_product.name; 
+                document.getElementById('edit_url').value    = data.edit_product.url; 
+                document.getElementById('edit_number').value = data.edit_product.number; 
+                document.getElementById('edit_price').value  = data.edit_product.price; 
             }
         }
     }
@@ -173,6 +201,7 @@ document.addEventListener('DOMContentLoaded', async function(){
                 db.collection('products')
                 .get()
                 .then( res => {
+                    data.products = [];
                     res.forEach( element => {
                         const product = {
                             ...element.data(),
@@ -183,6 +212,20 @@ document.addEventListener('DOMContentLoaded', async function(){
                     this.$forceUpdate();
                     console.log(data.products);
                 })
+            },
+            saveEditedProduct(){
+                data.edit_product.name   = document.getElementById('edit_name').value,
+                data.edit_product.url    = document.getElementById('edit_url').value,
+                data.edit_product.number = document.getElementById('edit_number').value,
+                data.edit_product.price  = document.getElementById('edit_price').value
+
+                db.collection("products")
+                    .doc(data.edit_product.id)
+                    .update(data.edit_product)
+                    .then( () => {
+                        console.log("Document is updated!")
+                        this.getAllProducts();
+                });
             }
         },
         components: {
@@ -205,16 +248,27 @@ document.addEventListener('DOMContentLoaded', async function(){
     const app = {
         data() {  return data },
         methods: {
-           logOut(){
-            firebase.auth().signOut().then(() => {
-                data.logged = false;
-                data.admin = false;
+            logOut(){
+                firebase.auth().signOut().then(() => {
+                    data.logged = false;
+                    data.admin = false;
+                    this.$forceUpdate();
+                    window.location.hash = "#/login";
+                }).catch((error) => {
+                    console.log(error);
+                });
+            },
+            checkUser(){
+                data.user = JSON.parse(localStorage.getItem("user")) || {};
+                data.admin = JSON.parse(localStorage.getItem("admin")) || false;
+
+                if(data.user.email != null){
+                    data.logged = true;
+                }
+
                 this.$forceUpdate();
-                window.location.hash = "#/login";
-            }).catch((error) => {
-                  console.log(error);
-            });
-           }
+                console.log("User checked!");
+            }
         },
         components: { },
         computed: {
@@ -225,7 +279,8 @@ document.addEventListener('DOMContentLoaded', async function(){
         mounted(){
             window.addEventListener('hashchange', () => {
                 this.currentPath = window.location.hash
-            })
+            });
+            this.checkUser();
         }
     }
     Vue.createApp(app).mount('#app');
