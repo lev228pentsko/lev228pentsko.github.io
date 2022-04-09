@@ -28,19 +28,19 @@
             <div class="modal-body">
                 <div class="mb-3">
                     <label class="form-label">Product name</label>
-                    <input id="edit_name" type="text" class="form-control">
+                    <input v-model="$root.edit_product.name" type="text" class="form-control">
                 </div>
                 <div class="mb-3">
                     <label class="form-label">Product image</label>
-                    <input id="edit_url" type="text" class="form-control">
+                    <input v-model="$root.edit_product.url" type="text" class="form-control">
                 </div>
                 <div class="mb-3">
                     <label class="form-label">Product number</label>
-                    <input id="edit_number" type="number" class="form-control">
+                    <input v-model="$root.edit_product.number" type="number" class="form-control">
                 </div>
                 <div class="mb-3">
                     <label class="form-label">Product price</label>
-                    <input id="edit_price" type="number" class="form-control">
+                    <input v-model="$root.edit_product.price" type="number" class="form-control">
                 </div>             
             </div>
             <div class="modal-footer">
