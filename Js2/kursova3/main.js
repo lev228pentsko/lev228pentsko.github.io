@@ -9,6 +9,8 @@ document.addEventListener('DOMContentLoaded', async function(){
     let orderProducts             = await axios.get("templates/orderProducts.html");
     let cart                      = await axios.get("templates/cart.html");
     let orderProductCard          = await axios.get("templates/orderProductCard.html");
+    let myOrders                  = await axios.get("templates/myOrders.html");
+    let myOrdersAdmin             = await axios.get("templates/myOrdersAdmin.html");
 
     //Основна інформація для spa (сайту)
     const data =  {
@@ -21,7 +23,12 @@ document.addEventListener('DOMContentLoaded', async function(){
         newProductLogo: "",
         products: [],
         edit_product: {},
-        cart: []
+        cart: [],
+        orderedProducts: [],
+        newOrder: { order: {}, user: {}, status: "pending" },
+        orderSubmited: false,
+        myOrders: [],
+        adminOrders: [],
     };
 
     //Компоненти
@@ -244,10 +251,14 @@ document.addEventListener('DOMContentLoaded', async function(){
         props: ['product'],
         methods: {
             addToCart(id){
-                data.cart.push(id);
+
+                if(!data.cart.includes(id)){
+                    data.cart.push(id);
+                    localStorage.setItem("cart", JSON.stringify(data.cart))
+                }
                 data.products.forEach( product => {
-                    if(product.id == id){
-                        product.inCart = true;
+                    if(product.id == id){ 
+                        product.inCart = true; 
                     };
                 })
                 this.$root.$forceUpdate();
@@ -269,27 +280,144 @@ document.addEventListener('DOMContentLoaded', async function(){
                             ...element.data(),
                             id: element.id
                         };
-                        data.products.push(product)
+                        if(data.cart.includes(product.id)){
+                            product.inCart = true;
+                        }
+                        data.products.push(product);
                     })
                     this.$forceUpdate();
                 })
             }
         },
         components: {
-            OrderProductCard 
+            OrderProductCard
         },
         mounted: function(){
             this.getAllProducts();
         }
     }
+
     const Cart = {
         template: cart.data,
         methods: {
+            getProductsFromCart(){
+                data.orderedProducts = [];
+                data.cart = JSON.parse(localStorage.getItem("cart")) || [];
+                this.$forceUpdate();
+                if(data.cart.length < 1) return;
+                db.collection("products")
+                .where(firebase.firestore.FieldPath.documentId(), "in", data.cart)
+                .get()
+                .then( res => {
+                    res.forEach(e => {
+                        const product = {
+                            id: e.id,
+                            count: 1,
+                            ...e.data()
+                        };
+                        data.orderedProducts.push(product);
+                    })
+                    this.countOrderPrice();
+                    this.$forceUpdate();
+                })
+            },
+            removeProductFromCart(id){
+                console.log(id);
+                data.cart = data.cart.filter( prod_id => prod_id != id);
+                data.orderedProducts = data.orderedProducts.filter( prod => prod.id != id);
+                localStorage.setItem("cart", JSON.stringify(data.cart));
+                this.countOrderPrice();
+                this.$forceUpdate();
+                this.$root.$forceUpdate();
+            },
+            countOrderPrice(){
+                let orderSum = 0;
+                data.orderedProducts.forEach(p => {
+                    orderSum += Number(p.price)*p.count;
+                })
+                data.newOrder = {
+                    order: {
+                        sum: orderSum,
+                        products: data.orderedProducts
+                    },
+                    user: data.user
+                }
+            },
+            submitOrder(){
+                console.log("Save order to db");
+                if(!confirm("Submit order?")){ return }
+                data.newOrder.status = "pending";
+                db.collection("orders")
+                .add(data.newOrder)
+                .then( res => {
+                    console.log("Order submited");
+                    data.cart = [];
+                    data.orderedProducts = [];
+                    data.newOrder = { order: {}, user: {}, status: "pending" };
+                    localStorage.removeItem("cart");
+                    this.$root.$forceUpdate();
+                })
+                console.log(data.newOrder);
+            }
         },
         components: {
         },
         mounted: function(){
+            this.getProductsFromCart()
+        }
+    }
 
+    const MyOrdеrs = {
+        template: myOrders.data,
+        methods: {
+            getMyOrders(){
+                data.myOrders = [];
+                const userEmail = data.user?.email || JSON.parse(localStorage.getItem("user"))?.email;
+                db.collection("orders")
+                .where("user.email", "==", userEmail)
+                .get()
+                .then( res => {
+                    res.forEach(e => {
+                        const order = {
+                            id: e.id,
+                            ...e.data()
+                        }
+                        data.myOrders.push(order)
+                    })
+                    console.log(data.myOrders);
+                    this.$forceUpdate()
+                })
+            }
+        },
+        mounted: function(){
+            //що відбувається при першому показі
+            this.getMyOrders()
+        }
+    }
+
+    const MyOrdеrsAdmin = {
+        template: myOrdersAdmin.data,
+        methods: {
+            getAllOrders(){
+                data.adminOrders = [];
+                db.collection("orders")
+                .get()
+                .then( res => {
+                    res.forEach(e => {
+                        const order = {
+                            id: e.id,
+                            ...e.data()
+                        }
+                        data.adminOrders.push(order)
+                    })
+                    console.log(data.myOrders);
+                    this.$forceUpdate();
+                })
+            }
+        },
+        mounted: function(){
+            //що відбувається при першому показі
+            this.getAllOrders();
         }
     }
 
@@ -301,7 +429,9 @@ document.addEventListener('DOMContentLoaded', async function(){
         '/addproduct': AddProduct,
         '/allproducts': AllProducts,
         '/products': OrderProducts,
-        '/cart': Cart
+        '/cart': Cart,
+        '/my-orders': MyOrdеrs,
+        '/orders-admin': MyOrdеrsAdmin,
     }
 
     const app = {
@@ -313,6 +443,7 @@ document.addEventListener('DOMContentLoaded', async function(){
                     data.admin = false;
                     localStorage.removeItem("user");
                     localStorage.removeItem("admin");
+                    data.user = {};
                     this.$forceUpdate();
                     window.location.hash = "#/login";
                 }).catch((error) => {
@@ -322,7 +453,7 @@ document.addEventListener('DOMContentLoaded', async function(){
             checkUser(){
                 data.user = JSON.parse(localStorage.getItem("user")) || {};
                 data.admin = JSON.parse(localStorage.getItem("admin")) || false;
-
+                data.cart = JSON.parse(localStorage.getItem("cart")) || [];
                 if(data.user.email != null){
                     data.logged = true;
                 }

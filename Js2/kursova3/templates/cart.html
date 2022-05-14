@@ -2,8 +2,66 @@
     <h1 class="text-center">My cart</h1>
     <h3 class="text-center">({{$root.cart.length}}) products in cart</h3>
 
-    
-    <div class="d-flex flex-wrap justify-content-around mt-5">
-        ...
+    <h2 v-if="$root.orderSubmited" style="color: green;">
+      Thanks!<br>
+      Your order is pending.
+    </h2>
+
+    <div class="d-flex flex-wrap justify-content-around mt-5" v-if="$root.orderedProducts.length > 0">
+        <table class="table table-striped table-hover">
+            <thead>
+              <tr class="text-center">
+                <th scope="col">#</th>
+                <th scope="col">Image</th>
+                <th scope="col">Name</th>
+                <th scope="col">Price</th>
+                <th scope="col">Count</th>
+                <th scope="col"></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="(product, idx) in $root.orderedProducts" class="text-center">
+                <th scope="row">{{ idx + 1 }}</th>
+                <td class="text-center">
+                    <img :src="product.url" height="120">
+                </td>
+                <td>{{product.name}}</td>
+                <td>{{product.price}}</td>
+                <td>
+                  <button class="btn btn-light"  @click="product.count > 1 ? product.count-- : null;countOrderPrice()"><b>-</b></button>
+                  {{product.count}}
+                  <button class="btn btn-light" @click="product.count++;countOrderPrice()"><b>+</b></button>
+                </td>                
+                <td>
+                  <button 
+                    class="btn btn-sm btn-danger"
+                    @click="removeProductFromCart(product.id)"
+                  >Remove</button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
     </div>
+
+  
+
+    <div class="row" v-if="$root.newOrder.order.sum > 0">
+
+        <div class="col-4">
+          {{$root.newOrder.user.displayName}}<br>
+          {{$root.newOrder.user.email}}
+        </div>
+
+        <div class="col-4">
+          <h3>Total price: {{$root.newOrder.order.sum}}₴</h3>
+        </div>
+
+        <div class="col-4">
+          <div class="d-flex justify-content-end">
+            <button class="btn btn-dark" @click="submitOrder()">Submit order</button>
+          </div>
+        </div>
+
+    </div>
+
 </div>
