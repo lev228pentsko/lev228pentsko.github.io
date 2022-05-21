@@ -9,12 +9,14 @@
           <th scope="col" style="min-width:100px;">Products</th>
           <th scope="col">Total price</th>
           <th scope="col">Status</th>
+          <th scope="col"></th>
+          <th scope="col"></th>
         </tr>
       </thead>
       <tbody>
         <tr v-for="(orderData, idx) in $root.adminOrders" class="text-center">
           <th scope="row">{{ idx + 1 }}</th>
-          <th scope="row" class="d-flex flex-wrap justify-content-center">
+          <th scope="row" class="d-flex flex-wrap justify-content-center" style="max-width: 900px;">
             
             <p class="text-center mx-2" v-for="product in orderData.order.products">
               <img :src="product.url" height="100">
@@ -45,6 +47,24 @@
                 {{ orderData.status }}
               </span>
           </th>
+          
+          <th scope="col">
+            <select 
+              class="form-select form-select-sm" 
+              v-model="orderData.status" 
+              @change="changeStatus(orderData.status, orderData.id)"
+            >
+              <option value="pending">Pending</option>
+              <option value="sended">Sended</option>
+              <option value="done">Done</option>
+              <option value="failed">Failed</option>
+            </select>
+          </th>
+
+          <th scope="col">
+            <button class="btn btn-danger btn-sm" @click="deleteOrder(orderData.id)">Delete</button>
+          </th>
+
         </tr>
       </tbody>
     </table>

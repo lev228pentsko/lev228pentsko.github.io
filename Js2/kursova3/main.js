@@ -179,7 +179,7 @@ document.addEventListener('DOMContentLoaded', async function(){
                 }
                 db.collection("products")
                 .add(newProduct)
-                .then(() => console.log('product added to db'))
+                .then(() => toastr.success('Product added'))
             }
         }
     };
@@ -413,7 +413,30 @@ document.addEventListener('DOMContentLoaded', async function(){
                     console.log(data.myOrders);
                     this.$forceUpdate();
                 })
-            }
+            },
+            changeStatus(status, id){
+                db.collection("orders")
+                .doc(id)
+
+                .update({status: status})
+                .then(() => {
+                    toastr.info('Status updated!')
+                    toastr.warning('Status updated!')
+                    toastr.success('Status updated!')
+                    toastr.error('Status updated!')
+                })
+            },
+            deleteOrder(id){
+                if(!confirm("Are you sure?")) return
+                db.collection("orders")
+                .doc(id)
+
+                .delete()
+                .then(() => {
+                    toastr.error('Order deleted!');
+                    this.getAllOrders();
+                })
+            }       
         },
         mounted: function(){
             //що відбувається при першому показі
